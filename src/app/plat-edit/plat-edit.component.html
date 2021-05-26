@@ -1,0 +1,56 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Modification d'un plat
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="main-menu"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col class="col ion-text-center">
+        <h1>Modification d'un plat</h1>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label>Nom du plat</ion-label>
+          <ion-input type="text" [(ngModel)]="plat.libelle"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Ingrédients</ion-label>
+          <ion-input type="text" [(ngModel)]="plat.ingredients"></ion-input>
+        </ion-item>
+        <ion-list>
+          <ion-item>
+            <ion-label>Catégorie</ion-label>
+            <ion-select [(ngModel)]="plat.categorie.id" placeholder="Sélectionner une catégorie">
+              <ion-select-option *ngFor="let c of categories" [value]="c.id">{{c.libelle}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-list>
+        <ion-item>
+          <ion-label>Allergènes</ion-label>
+          <ion-input type="text" [(ngModel)]="plat.allergene"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Régime</ion-label>
+          <ion-input type="text" [(ngModel)]="plat.regime"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>URL de l'image</ion-label>
+          <ion-input type="text" [(ngModel)]="plat.image"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button (click)="editPlat()">Valider</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

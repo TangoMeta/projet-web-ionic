@@ -1,0 +1,152 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Menu du Central Perk
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="main-menu"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ng-container *ngFor="let categorie of categories">
+          <ion-col id="{{ categorie.libelle }}" *ngIf="categorie.libelle !== 'Plats masqués';">
+            <ion-row>
+              <ion-col>
+                <h1>{{ categorie.libelle }}</h1>
+              </ion-col>
+              <ng-container *ngIf="isAdmin">
+                <ion-col class="ion-text-center">
+                  <ion-button routerLink="/categorie-edit/{{ categorie.id }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewbox="0 0 16 16">
+                      <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+                    </svg>
+                  </ion-button>
+                </ion-col>
+                <ion-col *ngIf="categorie.plats.length === 0" class="ion-text-center">
+                  <ion-button (click)="deleteCategorie(categorie.id)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewbox="0 0 16 16">
+                      <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                    </svg>
+                  </ion-button>
+                </ion-col>
+                <ion-col class="ion-text-center">
+                  <ion-button (click)="addCategorie()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewbox="0 0 16 16">
+                      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                    </svg>
+                  </ion-button>
+                </ion-col>
+              </ng-container>
+            </ion-row>
+            <ion-grid>
+              <ion-row>
+                <ng-container *ngFor="let plat of plats">
+                  <ion-row class="ion-margin-vertical" *ngIf="plat.categorie.libelle === categorie.libelle">
+                    <ion-card *ngIf="isAdmin; else notAdmin">
+                      <ion-img src="{{ plat.image }}" alt="Photo de {{ plat.libelle }}" width='200' height='200'></ion-img>
+                      <a routerLink="/plat-edit/{{plat.id}}">
+                        <ion-card-header>
+                          <ion-card-title>{{ plat.libelle }}</ion-card-title>
+                        </ion-card-header>
+                        <ion-card-content>{{ plat.ingredients }}</ion-card-content>
+                        <ion-card-content>Convient au régime : {{ plat.regime }}</ion-card-content>
+                        <ion-card-content>Allergènes : {{ plat.allergene }}</ion-card-content>
+                      </a>
+                      <ion-card-content>
+                        <ion-button (click)="deletePlat(plat.id)" expand="full">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewbox="0 0 16 16">
+                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                          </svg>
+                        </ion-button>
+                      </ion-card-content>
+                    </ion-card>
+                    <ng-template #notAdmin>
+                      <ion-card>
+                        <ion-img src="{{ plat.image }}" class="card-img-top" alt="Photo de {{ plat.libelle }}" width="200" height="200"></ion-img>
+                        <ion-card-header>
+                          <ion-card-title>{{ plat.libelle }}</ion-card-title>
+                        </ion-card-header>
+                        <ion-card-content>{{ plat.ingredients }}</ion-card-content>
+                        <ion-card-content>Convient au régime : {{ plat.regime }}</ion-card-content>
+                        <ion-card-content>Allergènes : {{ plat.allergene }}</ion-card-content>
+                      </ion-card>
+                    </ng-template>
+                  </ion-row>
+                </ng-container>
+                <ion-col *ngIf="isAdmin">
+                  <a routerLink="/plat-add">
+                    <ion-card>
+                      <ion-img src="https://bit.ly/2NAJeKC" class="card-img-top" alt="Photo de plat" width="200" height="200"></ion-img>
+                      <ion-card-header>
+                        <ion-card-title>
+                          <h3>Nouveau plat</h3>
+                        </ion-card-title>
+                        <ion-card-content>
+                          Cliquer pour ajouter un nouveau plat
+                        </ion-card-content>
+                      </ion-card-header>
+                    </ion-card>
+                  </a>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-col>
+        </ng-container>
+        <ng-container *ngIf="isAdmin">
+          <ng-container *ngFor="let categorie of categories">
+            <div *ngIf="categorie.libelle === 'Plats masqués'">
+              <ion-row>
+                <ion-col>
+                  <h1>{{ categorie.libelle }}</h1>
+                </ion-col>
+                <ng-container *ngIf="isAdmin">
+                  <ion-col class="ion-text-center">
+                    <ion-button (click)="addCategorie()">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewbox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                      </svg>
+                    </ion-button>
+                  </ion-col>
+                </ng-container>
+              </ion-row>
+              <ion-grid>
+                <ion-row>
+                  <ng-container *ngFor="let plat of categorie.plats">
+                    <ion-col>
+                      <a routerLink="/plat-edit/{{ plat.id }}">
+                        <ion-card>
+                          <ion-img src="{{ plat.image }}" class="card-img-top" alt="Photo de {{ plat.libelle }}" width="200" height="200"></ion-img>
+                          <ion-card-header>
+                            <ion-card-title>{{ plat.libelle }}</ion-card-title>
+                          </ion-card-header>
+                          <ion-card-content>{{ plat.ingredients }}</ion-card-content>
+                          <ion-card-content>Convient au régime : {{ plat.regime }}</ion-card-content>
+                          <ion-card-content>Allergènes : {{ plat.allergene }}</ion-card-content>
+                        </ion-card>
+                      </a>
+                    </ion-col>
+                  </ng-container>
+                  <ion-col>
+                    <a routerLink="/plat-add">
+                      <ion-card>
+                        <ion-img src="https://bit.ly/2NAJeKC" class="card-img-top" alt="Photo de plat" width="200" height="200"></ion-img>
+                        <ion-card-header>
+                          <ion-card-title>Nouveau plat</ion-card-title>
+                        </ion-card-header>
+                        <ion-card-content>Cliquer pour ajouter un nouveau plat</ion-card-content>
+                      </ion-card>
+                    </a>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
